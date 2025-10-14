@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@assemblyscript/loader": "^0.17.14",
-    "assemblyscript": "^0.17.7",
+    "assemblyscript": "^0.17.14",
     "benchmark": "^2.1.4",
     "child-process": "^1.0.2",
     "connect": "^3.7.0",
@@ -28,5 +28,8 @@
     "serve-static": "^1.14.1"
   },
   "author": "Paweł Worzała",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^5.1.0",
+    "path": "^0.12.7"
+  }
 }
