@@ -12,11 +12,7 @@ import {
 import { Shader } from './Shader'
 import { Mesh } from './Mesh';
 
-import { getQuad } from './quad';
-
 import { loadModel } from './Engine';
-
-import { testFuncAA,log,logStr } from './MyFuncs';
 
 
 
@@ -42,7 +38,7 @@ export function setTexture(textureID:i32, ptr: i32, length: i32): void {
 
   textures[0] = str
 
-  logStr(ptr,length);
+  //logStr(ptr,length);
 }
 
 //export function setLog(str: string):void {
