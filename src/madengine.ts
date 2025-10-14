@@ -15,7 +15,6 @@ import { Mesh } from './Mesh';
 import { loadModel } from './Engine';
 
 
-
 class Model{
   meshes: Array<Mesh> = new Array();
   constructor(){}

@@ -71,20 +71,25 @@
 
   
 
-  function loadModel(modelID,strPtr,strLen){
+  async function loadModel(modelID,strPtr,strLen){
     const name = getStr(strPtr,strLen)
 
     console.log('model name: ', name)
 
+    const promise = await fetch('/models/box/box.bin')
+    const buffer = new Float32Array(await promise.arrayBuffer())
+
+    console.log(buffer)
+
 // Przykładowa tablica Float32Array (JavaScript)
-const jsArray = new Float32Array([
+const jsArray = buffer/*new Float32Array([
   0.5,0.5,0.0,   0.0, 0.0, 0.0, 1.0,1.0,
   0.5,-0.5,0.0,  0.0, 0.0, 0.0,  1.0,0.0,
   -0.5,-0.5,0.0, 0.0, 0.0, 0.0,   0.0,0.0,
   0.5,0.5,0.0,  0.0, 0.0, 0.0,  1.0,1.0,
   -0.5,-0.5,0.0, 0.0, 0.0, 0.0,   0.0,0.0,
   -0.5,0.5,0.0, 0.0, 0.0, 0.0,   0.0,1.0,
-]);
+]);*/
 
 // Ręczna alokacja pamięci w WASM
 const arrayPointer = exports.memory.grow(jsArray.length * jsArray.BYTES_PER_ELEMENT / 65536); // Alokacja nowych stron pamięci (każda strona ma 64 KB)
