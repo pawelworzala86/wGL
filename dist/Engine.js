@@ -1,6 +1,6 @@
-export function initEngine(importObject,test) {
+export function initEngine(importObject,loadModel) {
     if (importObject.Engine == null) {
         importObject.Engine = {};
     }
-    importObject.Engine.test = test
+    importObject.Engine.loadModel = loadModel
 }

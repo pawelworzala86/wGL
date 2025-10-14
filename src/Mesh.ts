@@ -13,8 +13,6 @@ import {
 
 import { Shader } from './Shader'
 
-import { test } from './Engine'
-
 
 
 

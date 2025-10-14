@@ -1,1 +1,1 @@
-export declare function test(): void
+export declare function loadModel(ptrStr:i32,lenStr:i32): void
