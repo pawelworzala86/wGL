@@ -36,11 +36,11 @@ export class Mesh{
     public position_al: GLint
     public normal_al: GLint
     public tex_coord_al: GLint
-    constructor(gl: WebGLRenderingContext, shader: Shader, data:StaticArray<f32>){
+    constructor(gl: WebGLRenderingContext, shader: Shader, data:StaticArray<f32>, texture:string){
         this.gl = gl
         this.data = data
         this.shader = shader
-        this.image_id = gl.createImage('kaijunicorn.png');
+        this.image_id = gl.createImage(texture);
         this.image_ready = false;
         this.texture = gl.createTexture();
         this.sampler = gl.getUniformLocation(shader.program, 'sampler');

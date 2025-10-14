@@ -133,7 +133,7 @@ function writeStringToMemory(str) {
     return { ptr, length: encodedString.length };
   }
 
-  const { ptr, length } = writeStringToMemory("Hello from JS!");
+  const { ptr, length } = writeStringToMemory("kaijunicorn.png");
   exports.receiveString(ptr, length); // Wywołaj funkcję WASM
 
 

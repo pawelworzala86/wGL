@@ -23,7 +23,7 @@ import { testFuncAA,log,logStr } from './MyFuncs';
 var gl: WebGLRenderingContext = new WebGLRenderingContext('cnvs', 'webgl2');
 
 
-
+let texture:string
 // Przyjmij wskaźnik i długość stringa z JS
 export function receiveString(ptr: i32, length: i32): void {
   const bytes: u8[] = [];
@@ -39,6 +39,8 @@ export function receiveString(ptr: i32, length: i32): void {
   for (let i = 0; i < bytes.length; i++) {
     str += String.fromCharCode(bytes[i]);
   }
+
+  texture = str
 
   logStr(ptr,length);
 }
@@ -109,10 +111,10 @@ export function displayLoop(): void {
   gl.clear(gl.COLOR_BUFFER_BIT);
 
 
-  if(!imp){
+  if(!imp&&texture){
     imp = true
     test() 
-    mesh = new Mesh(gl, shader, arr[0]);
+    mesh = new Mesh(gl, shader, arr[0], texture);
   }
   
 

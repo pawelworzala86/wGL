@@ -1,21 +1,17 @@
 {
-  "name": "aswebglue",
-  "version": "0.1.1",
-  "ascMain": "src/WebGL.ts",
+  "name": "wgl",
+  "version": "0.0.1",
+  "ascMain": "src/madengine.ts",
   "type": "module",
   "main": "src/ASWebGLue.js",
   "types": "src/ASWebGLue.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/battlelinegames/ASWebGLue"
+    "url": "https://github.com/pawelworzala86/wGL"
   },
   "scripts": {
     "build": "npm run build:examples",
-    "build:examples": "node ./scripts/build.js --mode dev",
-    "start": "live-server --verbose ./",
-    "release:patch": "npm version patch --message 'v%s' && npm publish && git push --follow-tags",
-    "release:minor": "npm version minor --message 'v%s' && npm publish && git push --follow-tags",
-    "release:major": "npm version major --message 'v%s' && npm publish && git push --follow-tags"
+    "build:examples": "node ./scripts/build.js --mode dev"
   },
   "devDependencies": {
     "@assemblyscript/loader": "^0.17.14",
@@ -31,7 +27,6 @@
     "rimraf": "^3.0.2",
     "serve-static": "^1.14.1"
   },
-  "author": "Rick Battagline <rick@battagline.com>",
-  "license": "MIT",
+  "author": "Paweł Worzała",
   "dependencies": {}
 }
