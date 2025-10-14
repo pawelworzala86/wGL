@@ -71,7 +71,7 @@
 
   
 
-  const loadModel=(strPtr,strLen)=>{
+  function loadModel(modelID,strPtr,strLen){
     const name = getStr(strPtr,strLen)
 
     console.log('model name: ', name)
@@ -98,7 +98,7 @@ wasmMemory3.set(jsArray);
   const { ptr, length } = writeStringToMemory("kaijunicorn.png");
   const textureID = exports.setTexture(ptr, length); // Wywołaj funkcję WASM
 
-  exports.addMesh(meshDataID, textureID)
+  exports.addMesh(modelID, meshDataID, textureID)
 
   //console.log(arrayNum)
 }

@@ -16,6 +16,31 @@ import { loadModel } from './Engine';
 
 
 
+class Model{
+  meshes: Array<Mesh> = new Array();
+  constructor(){}
+  addMesh(mesh:Mesh):void{
+    this.meshes.push(mesh)
+  }
+  render(projection: StaticArray<f32>, camera: StaticArray<f32>):void{
+    for(let i=0;i<this.meshes.length;i++){
+        this.meshes[i].render(projection, camera)
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 var gl: WebGLRenderingContext = new WebGLRenderingContext('cnvs', 'webgl2');
 
 
@@ -73,10 +98,11 @@ export function setMeshData(ptr: usize, length: i32):i32 {
 */
 
 let meshes: Array<Mesh> = new Array();
-export function addMesh(dataID: i32, textureID: i32):i32 {
+export function addMesh(modelID:i32, dataID: i32, textureID: i32):i32 {
   let mesh:Mesh
   mesh = new Mesh(gl, shader, meshesData[dataID], textures[textureID]);
   meshes.push(mesh)
+  models[modelID].addMesh(mesh)
   return meshes.length-1
 }
 
@@ -106,11 +132,22 @@ let camera_matrix: StaticArray<f32> = [1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1
 
 
 
-let loaded = false
-function loadModels():void{
+let models: Array<Model> = new Array();
+function addModel(modelID:i32):void{
   const kai:string = 'kai'
   const kaiPtr = changetype<usize>(String.UTF8.encode(kai));
-  loadModel(kaiPtr,kai.length)
+  const model = new Model()
+  models[modelID] = model
+  loadModel(modelID, kaiPtr,kai.length)
+  loaded = true
+}
+
+let loaded = false
+let modelID = 0
+function loadModels():void{
+  //const kai:string = 'kai'
+  //const kaiPtr = changetype<usize>(String.UTF8.encode(kai));
+  addModel(modelID)
   loaded = true
 }
 
@@ -122,7 +159,7 @@ export function displayLoop(): void {
     loadModels()
   }
 
-  for(let i=0;i<meshes.length;i++){
-      meshes[i].render(projection_matrix, camera_matrix)
+  for(let i=0;i<models.length;i++){
+      models[i].render(projection_matrix, camera_matrix)
   }
 }
