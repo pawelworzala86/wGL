@@ -3,7 +3,9 @@
   "include": ["./src/**/*.ts"],
   "lib": ["asc.d.ts"],
   "compilerOptions": {
-    // "target": "es2020",
-    // "module": "esnext"
+     //"target": "es2020",
+     //"module": "esnext"
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   }
 }

@@ -21,7 +21,7 @@ var gl: WebGLRenderingContext = new WebGLRenderingContext('cnvs', 'webgl2');
 
 let textures:Array<string> = new Array()
 // Przyjmij wskaźnik i długość stringa z JS
-export function setTexture(textureID:i32, ptr: i32, length: i32): void {
+export function setTexture(ptr: i32, length: i32): i32 {
   const bytes: u8[] = [];
   let offset = 0;
   while (true) {
@@ -36,17 +36,17 @@ export function setTexture(textureID:i32, ptr: i32, length: i32): void {
     str += String.fromCharCode(bytes[i]);
   }
 
-  textures[0] = str
+  textures.push(str)
 
-  //logStr(ptr,length);
+  return textures.length-1
 }
 
 //export function setLog(str: string):void {
   //logStr(str,str.length)
 //}
 
-let meshes:Array<StaticArray<f32>> = new Array()
-export function setMesh(meshID:i32, ptr: usize, length: i32):i32 {
+let meshesData:Array<StaticArray<f32>> = new Array()
+export function setMeshData(ptr: usize, length: i32):i32 {
 
   const array = new StaticArray<f32>(length); // Tworzymy nową tablicę StaticArray
   for (let i = 0; i < length; i++) {
@@ -63,8 +63,8 @@ export function setMesh(meshID:i32, ptr: usize, length: i32):i32 {
     //table[i] = <f32>i * 0.1;
     table[i] = array[i]
 }
-  meshes[meshID] = table
-  return meshes.length-1
+  meshesData.push(table)
+  return meshesData.length-1
 }
 /*export function getArrayFromSet(): StaticArray<f32> {
   let index:i32 = 0
@@ -72,8 +72,13 @@ export function setMesh(meshID:i32, ptr: usize, length: i32):i32 {
 }
 */
 
-
-
+let meshes: Array<Mesh> = new Array();
+export function addMesh(dataID: i32, textureID: i32):i32 {
+  let mesh:Mesh
+  mesh = new Mesh(gl, shader, meshesData[dataID], textures[textureID]);
+  meshes.push(mesh)
+  return meshes.length-1
+}
 
 
 
@@ -88,9 +93,9 @@ gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
 
-let mesh:Mesh
-
-
+//let mesh:Mesh
+//let meshes:Array<Mesh<f32>> = new Array()
+//meshes[0] = new Mesh(gl, shader, meshes[0], textures[0]);
 
 
 
@@ -101,24 +106,23 @@ let camera_matrix: StaticArray<f32> = [1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1
 
 
 
-let imp = false
-const kai = 'kai'
+let loaded = false
+function loadModels():void{
+  const kai:string = 'kai'
+  const kaiPtr = changetype<usize>(String.UTF8.encode(kai));
+  loadModel(kaiPtr,kai.length)
+  loaded = true
+}
 
 export function displayLoop(): void {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-
-  if(!imp&&textures){
-    imp = true
-
-    const kaiPtr = changetype<usize>(String.UTF8.encode(kai));
-    loadModel(kaiPtr,kai.length)
-
-    mesh = new Mesh(gl, shader, meshes[0], textures[0]);
+  if(!loaded){
+    loadModels()
   }
-  
 
- 
-  mesh.render(projection_matrix, camera_matrix)
+  for(let i=0;i<meshes.length;i++){
+      meshes[i].render(projection_matrix, camera_matrix)
+  }
 }

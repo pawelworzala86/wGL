@@ -49,8 +49,32 @@
         return str
     }
 
+  // Funkcja do zapisywania stringa w pamięci WASM
+  function writeStringToMemory(str) {
+    const encoder = new TextEncoder();
+    const encodedString = encoder.encode(str);
+    const buffer = new Uint8Array(memory.buffer);
+
+    // Zwiększ pamięć, jeśli jest za mała
+    const requiredMemory = encodedString.length;
+    if (buffer.byteLength < requiredMemory) {
+      wasmModule.instance.exports.memory.grow(Math.ceil(requiredMemory / 65536));
+    }
+
+    // Wskaźnik początkowy do pamięci WASM
+    const ptr = 0; // Stały wskaźnik do początku pamięci (bez dynamicznej alokacji)
+
+    // Kopiuj string do pamięci WASM
+    buffer.set(encodedString, ptr);
+    return { ptr, length: encodedString.length };
+  }
+
+  
+
   const loadModel=(strPtr,strLen)=>{
     const name = getStr(strPtr,strLen)
+
+    console.log('model name: ', name)
 
 // Przykładowa tablica Float32Array (JavaScript)
 const jsArray = new Float32Array([
@@ -69,7 +93,12 @@ const wasmMemory3 = new Float32Array(exports.memory.buffer, arrayPointer, jsArra
 // Skopiowanie danych z Float32Array do pamięci WASM
 wasmMemory3.set(jsArray);
 
-  exports.setMesh(0, arrayPointer, jsArray.length);
+  const meshDataID = exports.setMeshData(arrayPointer, jsArray.length);
+
+  const { ptr, length } = writeStringToMemory("kaijunicorn.png");
+  const textureID = exports.setTexture(ptr, length); // Wywołaj funkcję WASM
+
+  exports.addMesh(meshDataID, textureID)
 
   //console.log(arrayNum)
 }
@@ -127,28 +156,7 @@ wasmMemory3.set(jsArray);
 
     //exports.setLog('hello world!!!')
 
-// Funkcja do zapisywania stringa w pamięci WASM
-function writeStringToMemory(str) {
-    const encoder = new TextEncoder();
-    const encodedString = encoder.encode(str);
-    const buffer = new Uint8Array(memory.buffer);
 
-    // Zwiększ pamięć, jeśli jest za mała
-    const requiredMemory = encodedString.length;
-    if (buffer.byteLength < requiredMemory) {
-      wasmModule.instance.exports.memory.grow(Math.ceil(requiredMemory / 65536));
-    }
-
-    // Wskaźnik początkowy do pamięci WASM
-    const ptr = 0; // Stały wskaźnik do początku pamięci (bez dynamicznej alokacji)
-
-    // Kopiuj string do pamięci WASM
-    buffer.set(encodedString, ptr);
-    return { ptr, length: encodedString.length };
-  }
-
-  const { ptr, length } = writeStringToMemory("kaijunicorn.png");
-  exports.setTexture(0, ptr, length); // Wywołaj funkcję WASM
 
 
 
