@@ -53,7 +53,6 @@ let u8array: Uint8Array
 
 
 
-let byteView: Uint8Array
 let offset: i32 = 0
 let buffer: ArrayBuffer
 let array: StaticArray<u8>
@@ -91,15 +90,15 @@ logStr('array[0]: '+array[0].toString())
 logStr('u32data: '+u32data.toString())
 
 buffer = changetype<ArrayBuffer>(array);
-byteView = Uint8Array.wrap(buffer);
+//byteView = Uint8Array.wrap(buffer);
 
 
-  const bufferU8 = changetype<ArrayBuffer>(array)
+  /*const bufferU8 = changetype<ArrayBuffer>(array)
   u8array = Uint8Array.wrap(bufferU8)
 
   const u32number = load<u32>(changetype<usize>(u8array.buffer)); // lub changetype<usize>(array)
   logStr('u32number: ' + u32number.toString());
-  offset+=4
+  offset+=4*/
 
   /*const resultD8 = new StaticArray<f32>(u32number/4);
   for (let i = 0; i < u32number/4; i++) {

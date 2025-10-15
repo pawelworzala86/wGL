@@ -90,7 +90,7 @@ const fileData = []
 const mesh = meshes[0]
 
 let data = []
-for(let i=0;i<mesh.position.length;i++){
+for(let i=0;i<mesh.position.length/3;i++){
     data.push(mesh.position[i*3+0],mesh.position[i*3+1],mesh.position[i*3+2])
     data.push(mesh.normal[i*3+0],mesh.normal[i*3+1],mesh.normal[i*3+2])
     data.push(mesh.coord[i*2+0],mesh.coord[i*2+1])
