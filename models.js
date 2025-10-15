@@ -76,6 +76,17 @@ const meshes = loadOBJ('box')
 
 console.log(meshes)
 
+
+function str2U8(str){
+    //const str = "Twój tekst";
+    const encoder = new TextEncoder();
+    const u8array = encoder.encode(str); // Uint8Array
+    console.log(u8array);
+    return u8array
+}
+
+
+const fileData = []
 const mesh = meshes[0]
 
 let data = []
@@ -87,5 +98,14 @@ for(let i=0;i<mesh.position.length;i+=3){
 console.log(data)
 
 const dataBin = new Uint8Array(new Float32Array(data).buffer)
+const dataLen = new Uint8Array(new Uint32Array([dataBin.length]).buffer)
+fileData.push(...dataLen)
+fileData.push(...dataBin)
 
-fs.writeFileSync('./dist/models/box/box.bin',dataBin)
+const texFile = 'kaijunicorn.png'
+const texture = str2U8(texFile)
+const dataLenT = new Uint8Array(new Uint32Array([texFile.length]).buffer)
+fileData.push(...dataLenT)
+fileData.push(...texture)
+
+fs.writeFileSync('./dist/models/box/box.bin',new Uint8Array(fileData))

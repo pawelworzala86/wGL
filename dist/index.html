@@ -77,12 +77,35 @@
     console.log('model name: ', name)
 
     const promise = await fetch('/models/box/box.bin')
-    const buffer = new Float32Array(await promise.arrayBuffer())
-
-    console.log(buffer)
+    const buffer = new Uint8Array(await promise.arrayBuffer())
+    let offset = 0
+    function getUint32(){
+      const i8 = buffer.slice(offset,offset+4)
+      offset+=4
+      return (new Uint32Array(i8.buffer))[0]
+    }
+    function getDataF32(length){
+      const i8 = buffer.slice(offset,offset+length)
+      offset+=length
+      return (new Float32Array(i8.buffer))
+    }
+    function getString(length) {
+      const i8 = buffer.slice(offset, offset + length);
+      offset += length;
+      return new TextDecoder("utf-8").decode(i8);
+    }
+    //console.log(buffer)
+    const dataLen = getUint32()
+    console.log('dataLen',dataLen)
+    const dataSet = getDataF32(dataLen)
+    console.log('dataSet',dataSet)
+    const texLen = getUint32()
+    console.log('texLen',texLen)
+    const texureName = getString(texLen)
+    console.log('texureName',texureName)
 
 // Przykładowa tablica Float32Array (JavaScript)
-const jsArray = buffer/*new Float32Array([
+const jsArray = dataSet/*new Float32Array([
   0.5,0.5,0.0,   0.0, 0.0, 0.0, 1.0,1.0,
   0.5,-0.5,0.0,  0.0, 0.0, 0.0,  1.0,0.0,
   -0.5,-0.5,0.0, 0.0, 0.0, 0.0,   0.0,0.0,
@@ -100,7 +123,7 @@ wasmMemory3.set(jsArray);
 
   const meshDataID = exports.setMeshData(arrayPointer, jsArray.length);
 
-  const { ptr, length } = writeStringToMemory("kaijunicorn.png");
+  const { ptr, length } = writeStringToMemory(texureName);
   const textureID = exports.setTexture(ptr, length); // Wywołaj funkcję WASM
 
   exports.addMesh(modelID, meshDataID, textureID)
