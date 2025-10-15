@@ -12,7 +12,13 @@ import {
 import { Shader } from './Shader'
 import { Mesh } from './Mesh';
 
-import { loadModel } from './Engine';
+import { loadModel, logString } from './Engine';
+
+
+function logStr(str: string):void{
+  const kaiPtr = changetype<usize>(String.UTF8.encode(str));
+  logString(kaiPtr,str.length)
+}
 
 
 class Model{
@@ -32,9 +38,76 @@ class Model{
 
 
 
+let byteView: Uint8Array
+let offset: i32 = 0
+let buffer: ArrayBuffer
+let array: StaticArray<u8>
+
+function getUint32(): u32 {
+  //const value = load<u32>(changetype<usize>(byteView) + offset);
+  const ptr = changetype<usize>(array) + offset;
+  offset += 4;
+  return load<u32>(ptr);
+}
+
+function getDataF32(length: i32): StaticArray<f32> {
+  const result = new StaticArray<f32>(length);
+  for (let i = 0; i < length; i++) {
+    result[i] = load<f32>(changetype<usize>(array) + offset);
+    offset += 4;
+  }
+  return result;
+}
+
+function getString(length: i32): string {
+  const ptr = changetype<usize>(array) + offset;
+  offset += length;
+  return String.UTF8.decodeUnsafe(ptr, length, true);
+}
+
+export function setModelData(ptr: usize, length: i32):void {
+
+  array = new StaticArray<u8>(length); // Tworzymy nową tablicę StaticArray
+  for (let i = 0; i < length; i++) {
+    array[i] = load<u8>(ptr + i * sizeof<u8>()); // Ładujemy dane z pamięci WASM
+  }
+logStr('array[0]: '+array[0].toString())
+  const u32data = load<u32>(changetype<usize>(array) + offset);
+logStr('u32data: '+u32data.toString())
+
+buffer = changetype<ArrayBuffer>(array);
+byteView = Uint8Array.wrap(buffer);
 
 
+  //meshesData.push(table)
+  //return meshesData.length-1
+// Zakładamy, że byteView to Uint8Array i offset to globalna zmienna
+offset = 0
+//let byteView: Uint8Array; // musi być zainicjalizowany wcześniej
 
+logStr('model loaded')
+
+  //console.log(buffer)
+  const dataLen = getUint32()
+  logStr('dataLen: '+dataLen.toString())
+  //console.log('dataLen',dataLen)
+  const dataSet = getDataF32(dataLen)
+  logStr('dataSet: '+dataSet.length.toString())
+  logStr('dataSet[1]: '+dataSet[1].toString())
+  //console.log('dataSet',dataSet)
+  const texLen = getUint32()
+  logStr('texLen: '+texLen.toString())
+  //console.log('texLen',texLen)
+  const texureName = getString(texLen)
+  logStr('texureName: '+texureName)
+  //console.log('texureName',texureName)
+
+
+  let mesh:Mesh
+  mesh = new Mesh(gl, shader, dataSet, texureName);
+  meshes.push(mesh)
+  models[modelID].addMesh(mesh)
+}
 
 
 

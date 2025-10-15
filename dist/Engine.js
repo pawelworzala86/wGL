@@ -3,4 +3,15 @@ export function initEngine(importObject,loadModel) {
         importObject.Engine = {};
     }
     importObject.Engine.loadModel = loadModel
+
+    importObject.Engine.logString = function(strPtr,strLen){
+        const memory = new Uint8Array(importObject.env.memory.buffer, strPtr, strLen);
+
+        // Dekoduj string UTF-8
+        const decoder = new TextDecoder("utf-8");
+        const str = decoder.decode(memory);
+
+        // Wyświetl odczytany string
+        console.log("String from WASM:", str);
+    }
 }

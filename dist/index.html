@@ -76,8 +76,24 @@
 
     console.log('model name: ', name)
 
-    const promise = await fetch('/models/box/box.bin')
-    const buffer = new Uint8Array(await promise.arrayBuffer())
+    const response = await fetch('/models/box/box.bin');
+    const jsArray = new Uint8Array(await response.arrayBuffer());
+
+    // Alokujemy miejsce w pamięci WASM
+    const byteLength = jsArray.length;
+    const ptr = exports.__new(byteLength, 0); // zakładamy, że masz funkcję malloc w WASM
+
+    // Skopiuj dane do WASM pamięci
+    const wasmMemory = new Uint8Array(exports.memory.buffer, ptr, byteLength);
+    wasmMemory.set(jsArray);
+
+    // Przekaż wskaźnik i długość do WASM
+    const meshDataID = exports.setModelData(ptr, byteLength);
+
+
+
+    const buffer = jsArray
+
     let offset = 0
     function getUint32(){
       const i8 = buffer.slice(offset,offset+4)
@@ -105,15 +121,8 @@
     console.log('texureName',texureName)
 
 // Przykładowa tablica Float32Array (JavaScript)
-const jsArray = dataSet/*new Float32Array([
-  0.5,0.5,0.0,   0.0, 0.0, 0.0, 1.0,1.0,
-  0.5,-0.5,0.0,  0.0, 0.0, 0.0,  1.0,0.0,
-  -0.5,-0.5,0.0, 0.0, 0.0, 0.0,   0.0,0.0,
-  0.5,0.5,0.0,  0.0, 0.0, 0.0,  1.0,1.0,
-  -0.5,-0.5,0.0, 0.0, 0.0, 0.0,   0.0,0.0,
-  -0.5,0.5,0.0, 0.0, 0.0, 0.0,   0.0,1.0,
-]);*/
-
+//const jsArray = dataSet
+/*
 // Ręczna alokacja pamięci w WASM
 const arrayPointer = exports.memory.grow(jsArray.length * jsArray.BYTES_PER_ELEMENT / 65536); // Alokacja nowych stron pamięci (każda strona ma 64 KB)
 const wasmMemory3 = new Float32Array(exports.memory.buffer, arrayPointer, jsArray.length);
@@ -127,7 +136,7 @@ wasmMemory3.set(jsArray);
   const textureID = exports.setTexture(ptr, length); // Wywołaj funkcję WASM
 
   exports.addMesh(modelID, meshDataID, textureID)
-
+*/
   //console.log(arrayNum)
 }
 
