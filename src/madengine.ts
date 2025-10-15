@@ -135,7 +135,7 @@ logStr('model loaded')
 
   let mesh:Mesh
   mesh = new Mesh(gl, shader, dataSet, 'kaijunicorn.png');
-  meshes.push(mesh)
+  //meshes.push(mesh)
   models[modelID].addMesh(mesh)
 }
 
@@ -154,7 +154,7 @@ logStr('model loaded')
 
 var gl: WebGLRenderingContext = new WebGLRenderingContext('cnvs', 'webgl2');
 
-
+/*
 let textures:Array<string> = new Array()
 // Przyjmij wskaźnik i długość stringa z JS
 export function setTexture(ptr: i32, length: i32): i32 {
@@ -188,11 +188,6 @@ export function setMeshData(ptr: usize, length: i32):i32 {
   for (let i = 0; i < length; i++) {
     array[i] = load<f32>(ptr + i * sizeof<f32>()); // Ładujemy dane z pamięci WASM
   }
-/*
-  log(1.0)
-  log(array[0])
-  log(array[1])
-*/
   //let len:i32 = 3
   let table = new StaticArray<f32>(length);
   for (let i = 0; i < length; i++) {
@@ -202,12 +197,13 @@ export function setMeshData(ptr: usize, length: i32):i32 {
   meshesData.push(table)
   return meshesData.length-1
 }
+  */
 /*export function getArrayFromSet(): StaticArray<f32> {
   let index:i32 = 0
     return arr[index]
 }
 */
-
+/*
 let meshes: Array<Mesh> = new Array();
 export function addMesh(modelID:i32, dataID: i32, textureID: i32):i32 {
   let mesh:Mesh
@@ -215,7 +211,7 @@ export function addMesh(modelID:i32, dataID: i32, textureID: i32):i32 {
   meshes.push(mesh)
   models[modelID].addMesh(mesh)
   return meshes.length-1
-}
+}*/
 
 
 
