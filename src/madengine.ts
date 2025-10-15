@@ -91,7 +91,7 @@ logStr('model loaded')
   const dataLen = getUint32()
   logStr('dataLen: '+dataLen.toString())
   //console.log('dataLen',dataLen)
-  const dataSet = getDataF32(dataLen)
+  const dataSet = getDataF32(1152)
   logStr('dataSet: '+dataSet.length.toString())
   logStr('dataSet[1]: '+dataSet[1].toString())
   //console.log('dataSet',dataSet)
@@ -104,7 +104,7 @@ logStr('model loaded')
 
 
   let mesh:Mesh
-  mesh = new Mesh(gl, shader, dataSet, texureName);
+  mesh = new Mesh(gl, shader, dataSet, 'kaijunicorn.png');
   meshes.push(mesh)
   models[modelID].addMesh(mesh)
 }
