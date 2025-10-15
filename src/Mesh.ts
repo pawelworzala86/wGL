@@ -82,9 +82,17 @@ export class Mesh{
         gl.uniformMatrix4fv(this.cameraSampler, false, camera_matrix)
 
         if(!this.bufferReady&&this.data){
+            //this.data[0] = 2.0
             gl.bufferData<f32>(gl.ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
             this.bufferReady=true
+            //this.data[0] = 2.0
         }
+        /*if(this.data){
+          this.data[0] = 2.0
+          //this.buffer = gl.createBuffer();
+          //gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+          gl.bufferData<f32>(gl.ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
+        }*/
 
         //vertexAttribPointer     attribute |  dimensions | data type | normalize | stride bytes | offset bytes
         gl.vertexAttribPointer(this.position_al, 3, gl.FLOAT, +false, 32, 0);

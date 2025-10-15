@@ -85,9 +85,9 @@ export function setModelData(ptr: usize, length: i32):void {
   for (let i = 0; i < length; i++) {
     array[i] = load<u8>(ptr + i * sizeof<u8>()); // Ładujemy dane z pamięci WASM
   }
-logStr('array[0]: '+array[0].toString())
-  const u32data = load<u32>(changetype<usize>(array) + offset);
-logStr('u32data: '+u32data.toString())
+//logStr('array[0]: '+array[0].toString())
+//  const u32data = load<u32>(changetype<usize>(array) + offset);
+//logStr('u32data: '+u32data.toString())
 
 buffer = changetype<ArrayBuffer>(array);
 //byteView = Uint8Array.wrap(buffer);
@@ -136,6 +136,8 @@ logStr('model loaded')
   mesh = new Mesh(gl, shader, dataSet, 'kaijunicorn.png');
   //meshes.push(mesh)
   models[modelID].addMesh(mesh)
+
+  logStr('model added')
 }
 
 
