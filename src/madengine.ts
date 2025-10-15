@@ -38,6 +38,21 @@ class Model{
 
 
 
+
+
+
+
+
+
+
+
+
+let u8array: Uint8Array
+
+
+
+
+
 let byteView: Uint8Array
 let offset: i32 = 0
 let buffer: ArrayBuffer
@@ -79,6 +94,21 @@ buffer = changetype<ArrayBuffer>(array);
 byteView = Uint8Array.wrap(buffer);
 
 
+  const bufferU8 = changetype<ArrayBuffer>(array)
+  u8array = Uint8Array.wrap(bufferU8)
+
+  const u32number = load<u32>(changetype<usize>(u8array.buffer)); // lub changetype<usize>(array)
+  logStr('u32number: ' + u32number.toString());
+  offset+=4
+
+  /*const resultD8 = new StaticArray<f32>(u32number/4);
+  for (let i = 0; i < u32number/4; i++) {
+    resultD8[i] = load<f32>(changetype<usize>(u8array.buffer)+offset);
+    offset += 4
+  }
+  const f32number = Float32Array.wrap(changetype<ArrayBuffer>(resultD8));
+  logStr('f32number: ' + f32number.toString());*/
+
   //meshesData.push(table)
   //return meshesData.length-1
 // Zakładamy, że byteView to Uint8Array i offset to globalna zmienna
@@ -91,7 +121,7 @@ logStr('model loaded')
   const dataLen = getUint32()
   logStr('dataLen: '+dataLen.toString())
   //console.log('dataLen',dataLen)
-  const dataSet = getDataF32(1152)
+  const dataSet = getDataF32(dataLen/4)
   logStr('dataSet: '+dataSet.length.toString())
   logStr('dataSet[1]: '+dataSet[1].toString())
   //console.log('dataSet',dataSet)
@@ -108,6 +138,15 @@ logStr('model loaded')
   meshes.push(mesh)
   models[modelID].addMesh(mesh)
 }
+
+
+
+
+
+
+
+
+
 
 
 

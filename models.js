@@ -74,14 +74,14 @@ function loadOBJ(path){
 
 const meshes = loadOBJ('box')
 
-console.log(meshes)
+//console.log(meshes)
 
 
 function str2U8(str){
     //const str = "Twój tekst";
     const encoder = new TextEncoder();
     const u8array = encoder.encode(str); // Uint8Array
-    console.log(u8array);
+    //console.log(u8array);
     return u8array
 }
 
@@ -95,12 +95,13 @@ for(let i=0;i<mesh.position.length;i++){
     data.push(mesh.normal[i*3+0],mesh.normal[i*3+1],mesh.normal[i*3+2])
     data.push(mesh.coord[i*2+0],mesh.coord[i*2+1])
 }
-console.log(data)
+//console.log(data)
 
 const dataBin = new Uint8Array(new Float32Array(data).buffer)
 const dataLen = new Uint8Array(new Uint32Array([dataBin.length]).buffer)
 fileData.push(...dataLen)
 fileData.push(...dataBin)
+console.log(dataBin.length)
 
 const texFile = 'kaijunicorn.png'
 const texture = str2U8(texFile)
