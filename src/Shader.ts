@@ -1,12 +1,7 @@
 import {
     WebGLRenderingContext,
     WebGLShader,
-    ImageData,
-    WebGLUniformLocation,
-    WebGLBuffer,
-    GLint,
     WebGLProgram,
-    WebGLTexture,
   } from './WebGL';
 
 const VERTEX_SHADER_CODE: string = `#version 300 es

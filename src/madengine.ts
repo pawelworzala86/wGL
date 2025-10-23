@@ -1,12 +1,5 @@
 import {
   WebGLRenderingContext,
-  WebGLShader,
-  ImageData,
-  WebGLUniformLocation,
-  WebGLBuffer,
-  GLint,
-  WebGLProgram,
-  WebGLTexture,
 } from './WebGL';
 
 import { Shader } from './Shader'
@@ -47,9 +40,6 @@ class Model{
 
 
 
-let u8array: Uint8Array
-
-
 
 
 
@@ -58,7 +48,6 @@ let buffer: ArrayBuffer
 let array: StaticArray<u8>
 
 function getUint32(): u32 {
-  //const value = load<u32>(changetype<usize>(byteView) + offset);
   const ptr = changetype<usize>(array) + offset;
   offset += 4;
   return load<u32>(ptr);
@@ -81,59 +70,35 @@ function getString(length: i32): string {
 
 export function setModelData(ptr: usize, length: i32):void {
 
-  array = new StaticArray<u8>(length); // Tworzymy nową tablicę StaticArray
+  array = new StaticArray<u8>(length)
   for (let i = 0; i < length; i++) {
-    array[i] = load<u8>(ptr + i * sizeof<u8>()); // Ładujemy dane z pamięci WASM
+    array[i] = load<u8>(ptr + i * sizeof<u8>())
   }
-//logStr('array[0]: '+array[0].toString())
-//  const u32data = load<u32>(changetype<usize>(array) + offset);
-//logStr('u32data: '+u32data.toString())
 
-buffer = changetype<ArrayBuffer>(array);
-//byteView = Uint8Array.wrap(buffer);
+  buffer = changetype<ArrayBuffer>(array);
 
+  offset = 0
 
-  /*const bufferU8 = changetype<ArrayBuffer>(array)
-  u8array = Uint8Array.wrap(bufferU8)
-
-  const u32number = load<u32>(changetype<usize>(u8array.buffer)); // lub changetype<usize>(array)
-  logStr('u32number: ' + u32number.toString());
-  offset+=4*/
-
-  /*const resultD8 = new StaticArray<f32>(u32number/4);
-  for (let i = 0; i < u32number/4; i++) {
-    resultD8[i] = load<f32>(changetype<usize>(u8array.buffer)+offset);
-    offset += 4
-  }
-  const f32number = Float32Array.wrap(changetype<ArrayBuffer>(resultD8));
-  logStr('f32number: ' + f32number.toString());*/
-
-  //meshesData.push(table)
-  //return meshesData.length-1
-// Zakładamy, że byteView to Uint8Array i offset to globalna zmienna
-offset = 0
-//let byteView: Uint8Array; // musi być zainicjalizowany wcześniej
-
-logStr('model loaded')
+  //logStr('model loaded')
 
   //console.log(buffer)
   const dataLen = getUint32()
-  logStr('dataLen: '+dataLen.toString())
+  //logStr('dataLen: '+dataLen.toString())
   //console.log('dataLen',dataLen)
   const dataSet = getDataF32(dataLen/4)
-  logStr('dataSet: '+dataSet.length.toString())
-  logStr('dataSet[1]: '+dataSet[1].toString())
+  //logStr('dataSet: '+dataSet.length.toString())
+  //logStr('dataSet[1]: '+dataSet[1].toString())
   //console.log('dataSet',dataSet)
   const texLen = getUint32()
-  logStr('texLen: '+texLen.toString())
+  //logStr('texLen: '+texLen.toString())
   //console.log('texLen',texLen)
   const texureName = getString(texLen)
-  logStr('texureName: '+texureName)
+  //logStr('texureName: '+texureName)
   //console.log('texureName',texureName)
 
 
   let mesh:Mesh
-  mesh = new Mesh(gl, shader, dataSet, 'kaijunicorn.png');
+  mesh = new Mesh(gl, shader, dataSet, texureName);
   //meshes.push(mesh)
   models[modelID].addMesh(mesh)
 
@@ -155,66 +120,6 @@ logStr('model loaded')
 
 var gl: WebGLRenderingContext = new WebGLRenderingContext('cnvs', 'webgl2');
 
-/*
-let textures:Array<string> = new Array()
-// Przyjmij wskaźnik i długość stringa z JS
-export function setTexture(ptr: i32, length: i32): i32 {
-  const bytes: u8[] = [];
-  let offset = 0;
-  while (true) {
-    const byte = load<u8>(ptr + offset);
-    if (byte == 0) break; // Koniec stringa
-    bytes.push(byte);
-    offset++;
-  }
-
-  let str = "";
-  for (let i = 0; i < bytes.length; i++) {
-    str += String.fromCharCode(bytes[i]);
-  }
-
-  textures.push(str)
-
-  return textures.length-1
-}
-
-//export function setLog(str: string):void {
-  //logStr(str,str.length)
-//}
-
-let meshesData:Array<StaticArray<f32>> = new Array()
-export function setMeshData(ptr: usize, length: i32):i32 {
-
-  const array = new StaticArray<f32>(length); // Tworzymy nową tablicę StaticArray
-  for (let i = 0; i < length; i++) {
-    array[i] = load<f32>(ptr + i * sizeof<f32>()); // Ładujemy dane z pamięci WASM
-  }
-  //let len:i32 = 3
-  let table = new StaticArray<f32>(length);
-  for (let i = 0; i < length; i++) {
-    //table[i] = <f32>i * 0.1;
-    table[i] = array[i]
-}
-  meshesData.push(table)
-  return meshesData.length-1
-}
-  */
-/*export function getArrayFromSet(): StaticArray<f32> {
-  let index:i32 = 0
-    return arr[index]
-}
-*/
-/*
-let meshes: Array<Mesh> = new Array();
-export function addMesh(modelID:i32, dataID: i32, textureID: i32):i32 {
-  let mesh:Mesh
-  mesh = new Mesh(gl, shader, meshesData[dataID], textures[textureID]);
-  meshes.push(mesh)
-  models[modelID].addMesh(mesh)
-  return meshes.length-1
-}*/
-
-
 
 
 let shader = new Shader(gl)
@@ -225,11 +130,6 @@ gl.useProgram(shader.program)
 
 gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-
-//let mesh:Mesh
-//let meshes:Array<Mesh<f32>> = new Array()
-//meshes[0] = new Mesh(gl, shader, meshes[0], textures[0]);
 
 
 
@@ -253,8 +153,6 @@ function addModel(modelID:i32):void{
 let loaded = false
 let modelID = 0
 function loadModels():void{
-  //const kai:string = 'kai'
-  //const kaiPtr = changetype<usize>(String.UTF8.encode(kai));
   addModel(modelID)
   loaded = true
 }

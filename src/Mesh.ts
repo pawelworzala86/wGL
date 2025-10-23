@@ -1,15 +1,11 @@
 import {
     WebGLRenderingContext,
-    WebGLShader,
     ImageData,
     WebGLUniformLocation,
     WebGLBuffer,
     GLint,
-    WebGLProgram,
     WebGLTexture,
   } from './WebGL';
-
-//import { getQuad as getD } from './worzala';
 
 import { Shader } from './Shader'
 
