@@ -72,7 +72,7 @@ function loadOBJ(path){
     return meshes
 }
 
-const meshes = loadOBJ('box')
+const meshes = loadOBJ('mwj36')
 
 //console.log(meshes)
 
@@ -109,4 +109,4 @@ const dataLenT = new Uint8Array(new Uint32Array([texFile.length]).buffer)
 fileData.push(...dataLenT)
 fileData.push(...texture)
 
-fs.writeFileSync('./dist/models/box/box.bin',new Uint8Array(fileData))
+fs.writeFileSync('./dist/models/mwj36/mwj36.bin',new Uint8Array(fileData))

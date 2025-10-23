@@ -34,7 +34,7 @@ uniform sampler2D sampler;
 out vec4 color;
 
 void main() {
-  color = texture( sampler, tc );
+  color = vec4(vec3(0.5),1.0);//texture( sampler, tc );
 }
 `;
 
